@@ -11,7 +11,7 @@ import {
   Route,
   Link,
   Redirect,
-  Navigate
+  Navigate,
 } from "react-router-dom";
 
 
@@ -51,7 +51,7 @@ function HomePage() {
   return (
     <BrowserRouter>
        <Routes>
-        <Route exact path="/" element={roomCode ? <Navigate to={`room/${roomCode}`} />: renderHomePage()}  />
+        <Route exact path="/" element={renderHomePage()}  />
         <Route exact path="/join" element={<RoomJoinPage />} />
         <Route exact path="/create" element={<CreateRoomPage />} />
         <Route exact path="/room/:roomCode" element={<Room />}></Route>
@@ -61,3 +61,4 @@ function HomePage() {
 }
 
 export default HomePage;
+

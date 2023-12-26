@@ -1,37 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-
+import React, { Component, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Grid, Button, Typography } from "@material-ui/core";
+import { useNavigate, Link, Navigate } from "react-router-dom";
+import HomePage from "./HomePage";
 
 function Room() {
-  const {roomCode} = useParams()
+  const { roomCode } = useParams();
   const initialState = {
     votesToSKip: 2,
     guestCanPause: false,
-    isHost: false
-  }
-  const [roomData, setRoomData] = useState(initialState) 
-
+    isHost: false,
+  };
+  const [roomData, setRoomData] = useState(initialState);
 
   useEffect(() => {
     fetch("/api/get-room" + "?code=" + roomCode)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setRoomData({
-          ...roomData, 
+          ...roomData,
           votesToSKip: data.votes_to_skip,
           guestCanPause: data.guest_can_pause,
           isHost: data.is_host,
-        })
-      })
-  },[roomCode,setRoomData])
+        });
+      });
+  }, [roomCode, setRoomData]);
+
+
   return (
-    <div>
-      <h3>{roomCode}</h3>
-      <p>Votes: {roomData.votesToSKip}</p>  
-      <p>Guest: {roomData.guestCanPause.toString()}</p>
-      <p>Host: {roomData.isHost.toString()}</p>  
-    </div>
-  )
+    <Grid container spacing={1}>
+      <Grid item xs={12} align="center">
+        <Typography variant="h4" component="h4">
+          Code: {roomCode.toString()}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align="center">
+        <Typography variant="h6" component="h6">
+          Votes: {roomData.votesToSKip}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align="center">
+        <Typography variant="h6" component="h6">
+          Guest Can Pause: {roomData.guestCanPause.toString()}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align="center">
+        <Typography variant="h6" component="h6">
+          Host: {roomData.isHost.toString()}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align="center">
+        <Button
+          variant="contained"
+          color="secondary"
+          to="/"
+          component = {Link}
+        >
+          Leave Room
+        </Button>
+      </Grid>
+    </Grid>
+  );
 }
 
-export default Room
+export default Room;
+
