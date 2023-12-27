@@ -15,10 +15,10 @@ function CreateRoomPage() {
 
   const [defaultVotes, setdefaultVotes] = useState(2);
   const [guestCanPause, setguestCanPause] = useState(true);
-  const [votesToSkip, setgvotesToSkip] = useState(defaultVotes);
+  const [votesToSkip, setvotesToSkip] = useState(defaultVotes);
 
   const handleVotesChange = () => {
-    setgvotesToSkip(event.target.value);
+    setvotesToSkip(event.target.value);
   };
 
   const handleGuestCanPauseChange = () => {
