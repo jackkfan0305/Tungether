@@ -27,15 +27,17 @@ function Room(props) {
           return res.json();
         })
         .then((data) => {
+          console.log(data.votesToSKip)
+          console.log(data.guestCanPause)
           setRoomData({
             ...roomData,
-            votesToSKip: data.votes_to_skip,
+            votesToSkip: data.votes_to_skip,
             guestCanPause: data.guest_can_pause,
             isHost: data.is_host,
-          });
+          })
         });
   }, [])
-
+  
   function leaveButtonPressed() {
     const requestOptions = {
       method: "POST",
@@ -60,6 +62,7 @@ function Room(props) {
             votesToSkip={roomData.votesToSkip}
             guestCanPause={roomData.guestCanPause}
             roomCode={roomCode}
+            updateCallback={()=> {}}
           ></CreateRoomPage>
         </Grid>
         <Grid item xs={12} align="center">

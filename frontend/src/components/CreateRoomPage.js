@@ -10,19 +10,32 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-function CreateRoomPage() {
+function CreateRoomPage(props) {
+  const defaultProps = {
+    votesToSkip: 2,
+    guestCanPause: props.guestCanPause ? props.guestCanPause : true,
+    update: false,
+    roomCode: null,
+    updateCallback: () => {}
+  }
+
+  //props.votesToSkip ? props.votesToSkip : 2,
+
   const navigate = useNavigate();
 
-  const [defaultVotes, setdefaultVotes] = useState(2);
-  const [guestCanPause, setguestCanPause] = useState(true);
-  const [votesToSkip, setvotesToSkip] = useState(defaultVotes);
+  // const [guestCanPause, setguestCanPause] = useState(defaultProps.guestCanPause);
+  // const [votesToSkip, setvotesToSkip] = useState(defaultProps.votesToSkip);
+
+  const [state, setState] = useState(defaultProps)
 
   const handleVotesChange = () => {
-    setvotesToSkip(event.target.value);
+    setState({...state, votesToSkip: event.target.value})
+    console.log(state.votesToSkip)
   };
 
   const handleGuestCanPauseChange = () => {
-    setguestCanPause(event.target.value === "true" ? true : false);
+    setState({...state, guestCanPause: event.target.value === "true" ? true : false})
+   // setguestCanPause(event.target.value === "true" ? true : false);
   };
 
   const handleRoomButtonPressed = () => {
@@ -30,8 +43,8 @@ function CreateRoomPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        votes_to_skip: votesToSkip,
-        guest_can_pause: guestCanPause,
+        votes_to_skip: state.votesToSkip,
+        guest_can_pause: state.guestCanPause,
       }),
     };
   
@@ -40,11 +53,12 @@ function CreateRoomPage() {
       .then((data) => navigate("/room/" + data.code));
   };
 
+  const title = props.update ? "Update Room" : "Create a Room"
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} align="center">
         <Typography component="h4" variant="h4">
-          Create A Room
+          {title}
         </Typography>
       </Grid>
       <Grid item xs={12} align="center">
@@ -73,7 +87,7 @@ function CreateRoomPage() {
               required={true}
               type="number"
               onChange={handleVotesChange}
-              defaultValue={defaultVotes}
+              defaultValue={state.votesToSkip}
               inputProps={{
                 min: 1,
                 style: { textAlign: "center" },
