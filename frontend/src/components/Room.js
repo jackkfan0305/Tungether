@@ -1,4 +1,10 @@
-import React, { Component, useState, useEffect } from "react";
+import React, {
+  Component,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import { useParams } from "react-router-dom";
 import { Grid, Button, Typography } from "@material-ui/core";
 import { useNavigate, Link, Navigate } from "react-router-dom";
@@ -15,29 +21,33 @@ function Room(props) {
   };
   const [roomData, setRoomData] = useState(initialState);
   const navigate = useNavigate();
-  //getRoomDetails();
+  getRoomDetails();
 
-  useEffect(()=>{
-      fetch("/api/get-room" + "?code=" + roomCode)
-        .then((res) => {
-          if (!res.ok) {
-            props.parentCallBack();
-            navigate("/")
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log(data.votesToSKip)
-          console.log(data.guestCanPause)
-          setRoomData({
-            ...roomData,
-            votesToSkip: data.votes_to_skip,
-            guestCanPause: data.guest_can_pause,
-            isHost: data.is_host,
-          })
+  function getRoomDetails() {
+    useEffect(() => {
+      fetchRoomDetails();
+    }, []);
+  }
+
+  const fetchRoomDetails = () => {
+    fetch("/api/get-room" + "?code=" + roomCode)
+      .then((res) => {
+        if (!res.ok) {
+          props.parentCallBack();
+          navigate("/");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setRoomData({
+          ...roomData,
+          votesToSkip: data.votes_to_skip,
+          guestCanPause: data.guest_can_pause,
+          isHost: data.is_host,
         });
-  }, [])
-  
+      });
+  };
+
   function leaveButtonPressed() {
     const requestOptions = {
       method: "POST",
@@ -45,7 +55,7 @@ function Room(props) {
     };
     fetch("/api/leave-room", requestOptions).then((_response) => {
       props.parentCallBack();
-      navigate("/")
+      navigate("/");
     });
   }
 
@@ -62,7 +72,7 @@ function Room(props) {
             votesToSkip={roomData.votesToSkip}
             guestCanPause={roomData.guestCanPause}
             roomCode={roomCode}
-            updateCallback={()=> {}}
+            updateCallback={fetchRoomDetails}
           ></CreateRoomPage>
         </Grid>
         <Grid item xs={12} align="center">
