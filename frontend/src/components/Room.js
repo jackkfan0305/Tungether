@@ -11,26 +11,24 @@ import { useNavigate, Link, Navigate } from "react-router-dom";
 import HomePage from "./HomePage";
 import CreateRoomPage from "./CreateRoomPage";
 
-function Room(props) {
+const Room = (props) => {
   let { roomCode } = useParams();
-  const initialState = {
+  const [state, setState] = useState({
     votesToSkip: 2,
     guestCanPause: false,
     isHost: false,
     showSettings: false,
-  };
-  const [roomData, setRoomData] = useState(initialState);
+    spotifyAuthenticated: false,
+  });
   const navigate = useNavigate();
-  getRoomDetails();
+  //const roomCode = props.match.params.roomCode;
 
-  function getRoomDetails() {
-    useEffect(() => {
-      fetchRoomDetails();
-    }, []);
-  }
+  useEffect(() => {
+    fetchRoomDetails();
+  }, []);
 
   const fetchRoomDetails = () => {
-    fetch("/api/get-room" + "?code=" + roomCode)
+    return fetch("/api/get-room" + "?code=" + roomCode)
       .then((res) => {
         if (!res.ok) {
           props.parentCallBack();
@@ -39,12 +37,34 @@ function Room(props) {
         return res.json();
       })
       .then((data) => {
-        setRoomData({
-          ...roomData,
+        setState((prevState) => ({
+          ...prevState,
           votesToSkip: data.votes_to_skip,
           guestCanPause: data.guest_can_pause,
           isHost: data.is_host,
-        });
+        }));
+        if (data.is_host) {
+          authenticateSpotify();
+        }
+      });
+  };
+
+  const authenticateSpotify = () => {
+    fetch("/spotify/is-authenticated")
+      .then((response) => response.json())
+      .then((data) => {
+        setState((prevState) => ({
+          ...prevState,
+          spotifyAuthenticated: data.status,
+        }));
+        console.log(data.status);
+        if (!data.status) {
+          fetch("/spotify/get-auth-url")
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.replace(data.url);
+            });
+        }
       });
   };
 
@@ -60,7 +80,7 @@ function Room(props) {
   }
 
   function updateShowSettings(value) {
-    setRoomData({ ...roomData, showSettings: value });
+    setState({ ...state, showSettings: value });
   }
 
   function renderSettings() {
@@ -69,8 +89,8 @@ function Room(props) {
         <Grid item xs={12} align="center">
           <CreateRoomPage
             update={true}
-            votesToSkip={roomData.votesToSkip}
-            guestCanPause={roomData.guestCanPause}
+            votesToSkip={state.votesToSkip}
+            guestCanPause={state.guestCanPause}
             roomCode={roomCode}
             updateCallback={fetchRoomDetails}
           ></CreateRoomPage>
@@ -102,7 +122,7 @@ function Room(props) {
     );
   }
 
-  if (roomData.showSettings) {
+  if (state.showSettings) {
     return renderSettings();
   }
   return (
@@ -114,20 +134,21 @@ function Room(props) {
       </Grid>
       <Grid item xs={12} align="center">
         <Typography variant="h6" component="h6">
-          Votes: {roomData.votesToSkip}
+          {console.log(state.votesToSkip)}
+          Votes: {state.votesToSkip}
         </Typography>
       </Grid>
       <Grid item xs={12} align="center">
         <Typography variant="h6" component="h6">
-          Guest Can Pause: {roomData.guestCanPause.toString()}
+          Guest Can Pause: {state.guestCanPause.toString()}
         </Typography>
       </Grid>
       <Grid item xs={12} align="center">
         <Typography variant="h6" component="h6">
-          Host: {roomData.isHost.toString()}
+          Host: {state.isHost.toString()}
         </Typography>
       </Grid>
-      {roomData.isHost ? renderSettingsButton() : null}
+      {state.isHost ? renderSettingsButton() : null}
       <Grid item xs={12} align="center">
         <Button
           variant="contained"
@@ -139,6 +160,6 @@ function Room(props) {
       </Grid>
     </Grid>
   );
-}
+};
 
 export default Room;
