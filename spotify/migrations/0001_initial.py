@@ -17,10 +17,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('user', models.CharField(max_length=50, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('refresh_token', models.CharField(max_length=150)),
-                ('acccess_token', models.CharField(max_length=150)),
+                ('refresh_token', models.CharField(max_length=150, null = True)),
+                ('access_token', models.CharField(max_length=150, null = True)),
                 ('expires_in', models.DateTimeField()),
-                ('token_type', models.CharField(max_length=50)),
+                ('token_type', models.CharField(max_length=50, null = True)),
             ],
         ),
     ]
