@@ -25,20 +25,14 @@ function CreateRoomPage(props) {
     successMsg: "",
   };
 
-  //props.votesToSkip ? props.votesToSkip : 2,
-
   const navigate = useNavigate();
-
-  // const [guestCanPause, setguestCanPause] = useState(defaultProps.guestCanPause);
-  // const [votesToSkip, setvotesToSkip] = useState(defaultProps.votesToSkip);
-
   const [state, setState] = useState(defaultProps);
 
   useEffect(()=>{
-    //if (props.guestCanPause && props.votesToSkip){
+    if (props.guestCanPause && props.votesToSkip){
       setState({...state, guestCanPause: props.guestCanPause});
       setState({...state, votesToSkip: props.votesToSkip})
-    //}
+    }
   }, [props.guestCanPause, props.votesToSkip])
 
   const handleVotesChange = () => {
@@ -50,7 +44,6 @@ function CreateRoomPage(props) {
       ...state,
       guestCanPause: event.target.value === "true" ? true : false,
     });
-    // setguestCanPause(event.target.value === "true" ? true : false);
   };
 
   const handleRoomButtonPressed = () => {
@@ -168,7 +161,7 @@ function CreateRoomPage(props) {
           </FormHelperText>
           <RadioGroup
             row
-            defaultValue={props.guestCanPause.toString()}
+            defaultValue={props.guestCanPause != null ? props.guestCanPause.toString() : state.guestCanPause.toString()}
             onChange={handleGuestCanPauseChange}
           >
             <FormControlLabel
@@ -191,7 +184,7 @@ function CreateRoomPage(props) {
               required={true}
               type="number"
               onChange={handleVotesChange}
-              defaultValue={props.votesToSkip}
+              defaultValue={props.votesToSkip ? props.votesToSkip : state.votesToSkip}
               inputProps={{
                 min: 1,
                 style: { textAlign: "center" },
