@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -14,8 +14,8 @@ import Alert from "@material-ui/lab/Alert";
 
 function CreateRoomPage(props) {
   const defaultProps = {
-    votesToSkip: props.votesToSkip ? props.votesToSkip : 2,
-    guestCanPause: props.guestCanPause ? props.guestCanPause : true,
+    votesToSkip: 2,
+    guestCanPause: true,
     update: false,
     roomCode: null,
     updateCallback: () => {
@@ -33,6 +33,13 @@ function CreateRoomPage(props) {
   // const [votesToSkip, setvotesToSkip] = useState(defaultProps.votesToSkip);
 
   const [state, setState] = useState(defaultProps);
+
+  useEffect(()=>{
+    //if (props.guestCanPause && props.votesToSkip){
+      setState({...state, guestCanPause: props.guestCanPause});
+      setState({...state, votesToSkip: props.votesToSkip})
+    //}
+  }, [props.guestCanPause, props.votesToSkip])
 
   const handleVotesChange = () => {
     setState({ ...state, votesToSkip: event.target.value });
@@ -161,7 +168,7 @@ function CreateRoomPage(props) {
           </FormHelperText>
           <RadioGroup
             row
-            defaultValue={defaultProps.guestCanPause.toString()}
+            defaultValue={props.guestCanPause.toString()}
             onChange={handleGuestCanPauseChange}
           >
             <FormControlLabel
@@ -184,7 +191,7 @@ function CreateRoomPage(props) {
               required={true}
               type="number"
               onChange={handleVotesChange}
-              defaultValue={state.votesToSkip}
+              defaultValue={props.votesToSkip}
               inputProps={{
                 min: 1,
                 style: { textAlign: "center" },

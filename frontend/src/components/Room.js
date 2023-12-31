@@ -16,6 +16,7 @@ const Room = (props) => {
   let { roomCode } = useParams();
   const [state, setState] = useState({
     votesToSkip: 2,
+    votesToPrev: 2,
     guestCanPause: false,
     isHost: false,
     showSettings: false,
@@ -52,6 +53,7 @@ const Room = (props) => {
         setState((prevState) => ({
           ...prevState,
           votesToSkip: data.votes_to_skip,
+          votesToPrev: data.votes_to_skip,
           guestCanPause: data.guest_can_pause,
           isHost: data.is_host,
         }));
@@ -69,7 +71,6 @@ const Room = (props) => {
           ...prevState,
           spotifyAuthenticated: data.status,
         }));
-        console.log(data.status);
         if (!data.status) {
           fetch("/spotify/get-auth-url")
             .then((response) => response.json())
@@ -91,7 +92,6 @@ const Room = (props) => {
       })
       .then((data) => {
         setState((prevState) => ({ ...prevState, song: data }));
-        console.log(data)
       });
       
   };
