@@ -36,7 +36,7 @@ function HomePage() {
       <Grid container spacing={3}>
         <Grid item xs={12} align="center">
           <Typography variant="h3" compact="h3">
-            TuneSync
+            Tungether
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
