@@ -13,7 +13,6 @@ import SkipPreviousIcon from "@material-ui/icons/SkipPrevious"
 
 const MusicPlayer = (props) => {
   const songProgress = (props.time / props.duration) * 100;
-  //const prevVotes = props.votes;
 
   const pauseSong = () => {
     const requestOptions = {
