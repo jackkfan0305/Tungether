@@ -1,12 +1,9 @@
 {
-  "homepage": "http://jackkfan0305.github.io/music_controller",
   "name": "frontend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "dev": "webpack --mode development --watch",
     "build": "webpack --mode production"
   },
