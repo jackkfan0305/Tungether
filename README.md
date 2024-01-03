@@ -1,6 +1,6 @@
 # Tungether 🎶
 
-Welcome to Tungether! Tungether is a collaboartive music playing web-application. It allows one person to create a room with a distinct code(host), and other people (guests) can join the room with the given code. The hosts can set whether the guests can play/pause the music, and how many votes is needed to skip/previous a song. Once the room is created, the host can login to their spotify account, and start playing music! 
+Welcome to Tungether! Tungether is a collaboartive music playing web-application. It allows one person to create a room with a distinct code(host), and other people (guests) can join the room with the given code. The host can set whether the guests can play/pause the music, and how many votes is needed to skip/previous a song. Once the room is created, the host can login to their spotify account, and start playing music! 
 
 
 ## 🚀 Technologies Used
