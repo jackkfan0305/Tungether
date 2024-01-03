@@ -2,12 +2,12 @@ from django.db import models
 from api.models import Room
 
 class SpotifyToken(models.Model):
-    user = models.CharField(max_length=50, unique=True)
+    user = models.CharField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    refresh_token = models.CharField(max_length=15, null = True, default = '')
-    access_token = models.CharField(max_length=150, null = True, default = '')
+    refresh_token = models.CharField(null = True, default = '')
+    access_token = models.CharField(null = True, default = '')
     expires_in = models.DateTimeField()
-    token_type = models.CharField(max_length=50, null = True, default = '')
+    token_type = models.CharField(null = True, default = '')
 
 class Vote(models.Model):
     user = models.CharField(max_length=50, unique=True)
